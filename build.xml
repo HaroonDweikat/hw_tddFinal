@@ -1,0 +1,53 @@
+<project default="compile">
+	<property name="src" location="./src/classes/"/>
+	<property name="test" location="./src/test/"/>
+	<property name="result.dir" location="./target"/>
+	<property name="result.javaClasses.dir" location="${result.dir}/classes"/>
+	<property name="result.testClasses.dir" location="${result.dir}/TestClasses"/>
+
+	<path id="NecessaryLibraries">
+	        <pathelement location="./UsedLibraries/junit-4.12.jar"/>
+	        <!--matcher-->
+	        <pathelement location="./UsedLibraries/hamcrest-core-1.3.jar"/>
+	        <!--<pathelement location="./UsedLibraries/jacocoant.jar"/>-->
+	    </path>
+
+
+	<target name="compile">
+	        <mkdir dir="${result.javaClasses.dir}"/>
+	        <javac srcdir="${src}" destdir="${result.javaClasses.dir}" debug="true"  includeantruntime="false">
+	        </javac>
+	    </target>
+	
+	<target name="compile-testcases" depends="compile">
+	        <mkdir dir="${result.testClasses.dir}"/>
+	        <javac srcdir="${src}"  destdir="${result.testClasses.dir}" debug="true" includeantruntime="false">
+	            <classpath>
+
+	                <path refid="NecessaryLibraries"/>
+	                <pathelement location="${result.javaClasses.dir}"/>
+	            </classpath>
+	        </javac>
+	    </target>
+
+	    <target name="test" depends="compile-testcases">
+	        <!--fork : each test will run in its own JVM (to seperate test cases)-->
+	        <junit printsummary="true" haltonfailure="true" fork="true">
+	            <classpath>
+	                <path refid="NecessaryLibraries"></path>
+	                <pathelement location="${result.javaClasses.dir}"/>
+	                <pathelement location="${result.testClasses.dir}"/>
+	            </classpath>
+	            <formatter type="brief" usefile="false"/>
+	            <batchtest >
+	                <fileset dir="${result.testClasses.dir}" >
+	                     <include name="**/*Test.class"/>
+	                </fileset>
+	            </batchtest>
+
+	        </junit>
+	    </target>
+
+
+
+</project>
