@@ -4,9 +4,11 @@ public class Calculater {
 
 	
 
-	public int sum(int n1, int n2) {
-		// TODO Auto-generated method stub
-		return n1+n2;
+	public double add (double x , double y) {
+		return x+y ;
 	}
+
+	
+
 
 }
